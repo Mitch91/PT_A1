@@ -10,9 +10,11 @@
 ***************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <math.h>
 
 /* constants go here */
-#define NUM_OPTION_STATS 6
+#define NUM_OPTION_STATS 5
 
 /* This is used to compensate for the extra character spaces taken up by
    the '\n' and '\0' when user is asked for input through fgets(). */
@@ -22,11 +24,32 @@
    menu. */
 #define MAX_OPTION_INPUT 1
 
+/* Specifies the maximum number of characters an input of an integer 
+   can be. i.e. 7 = 7 digits */
+#define MAX_NUM_DIGITS 7   
+
+/* Specifies the minimum and maximum values allowed for the perfect
+   squares option */
+#define PERFECT_SQUARES_MIN 1
+#define PERFECT_SQUARES_MAX 1000000 
+
+/* Specifies the value that symbolises that the user wishes to return to 
+   the main menu. It has to be a value that no ASCII character has */ 
+#define RETURN_TO_MENU -2    
+
+
 /* provides us with a BOOLEAN type for using TRUE and FALSE */
 typedef enum true_false
 {
     FALSE=0,TRUE
 } BOOLEAN;
+
+/* Provides us with variables corresponding to each option for more 
+   readable code */
+typedef enum options{
+	PERFECT_SQUARES = 1, ASCII_TO_BINARY, MATCHING_BRACKETS, 
+	FORMATTED_TEXT, SESSION_SUMMARY, EXIT
+} OPTION;
 
 /* function prototypes for each option to be implemented */
 void perfect_squares(int * option_stats, unsigned number);
@@ -37,4 +60,7 @@ void session_summary(int * option_stats);
 
 /* function prototypes for additional functions contained in utility1.c */
 void read_rest_of_line(void);
+void dispOptions(void);
+int getInt(int min, int max);
+
 

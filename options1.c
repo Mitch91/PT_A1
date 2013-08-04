@@ -24,9 +24,33 @@
 * in is a perfect square and let the user know if it is or not. You also
 * need to print the perfect square before and after this value. Finally
 * you need to update the option_stats variable appropriately.
+*
+* function finds the square root of number, then tests to see if it is a 
+* whole number or not. from there the lower and upper roots are calculated
+* so that their respective perfect squares can be calculated.
 **************************************************************************/
-void perfect_squares(int * option_stats, unsigned number)
-{
+
+void perfect_squares(int * option_stats, unsigned number){
+	float root = sqrt (number);
+	unsigned lower_root, upper_root;
+	
+	/*if root is a whole number */
+	if(root == (int) root){
+		lower_root = root - 1;
+		upper_root = root + 1;
+		
+		printf("%d is a perfect square.\n", number);
+	} else{
+		lower_root = (int) root;
+		upper_root = lower_root + 1;
+		
+		printf("%d is not a perfect square.\n",number);
+	}
+	
+	printf("Perfect square before: %d.\n",lower_root*lower_root);
+	printf("Perfect square after: %d.\n", upper_root*upper_root);
+	
+	option_stats[PERFECT_SQUARES]++;
 }
 
 /**************************************************************************
@@ -37,8 +61,8 @@ void perfect_squares(int * option_stats, unsigned number)
 * the result. Finally, you need to update the option_stats array 
 * appropriately 
 **************************************************************************/
-void ascii_to_binary(int * option_stats, char * ascii)
-{
+void ascii_to_binary(int * option_stats, char * ascii){
+
 }
 
 /**************************************************************************
@@ -50,8 +74,8 @@ void ascii_to_binary(int * option_stats, char * ascii)
 * You need to tell the user whether the brackets match or not. Finally you
 * need to update the option_stats array appropriately.
 **************************************************************************/
-void matching_brackets(int * option_stats, char * test_string)
-{
+void matching_brackets(int * option_stats, char * test_string){
+
 }
 
 /**************************************************************************
@@ -63,8 +87,8 @@ void matching_brackets(int * option_stats, char * test_string)
 * possible. Finally you want to update the option_stats array appropriately.
 * 
 **************************************************************************/
-void format_text(int * option_stats, unsigned width, char * text)
-{
+void format_text(int * option_stats, unsigned width, char * text){
+
 }
 
 /**************************************************************************
@@ -73,6 +97,6 @@ void format_text(int * option_stats, unsigned width, char * text)
 * times that each option has been run and then update the count of how 
 * many times this function has been run.
 **************************************************************************/
-void session_summary(int * option_stats)
-{
+void session_summary(int * option_stats){
+
 }
