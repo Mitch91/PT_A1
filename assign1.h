@@ -33,9 +33,24 @@
 #define PERFECT_SQUARES_MIN 1
 #define PERFECT_SQUARES_MAX 1000000 
 
+/* Specifies the minimum and maximum amount of characters allowed to be
+   input into the ascii_to_binary function */
+
+#define ASCII_MIN 1
+#define ASCII_MAX 5   
+
+/* Specifies the minimum and maxiumum amount of characters allowed to be 
+   input into the matching_brackets function */
+   
+#define BRACKETS_MIN 1
+#define BRACKETS_MAX 20
+
 /* Specifies the value that symbolises that the user wishes to return to 
    the main menu. It has to be a value that no ASCII character has */ 
-#define RETURN_TO_MENU -2    
+#define RETURN_TO_MENU -2 
+
+/* Specifies the value of the most significant bit (MSB) */
+#define MSB 128   
 
 
 /* provides us with a BOOLEAN type for using TRUE and FALSE */
@@ -62,5 +77,5 @@ void session_summary(int * option_stats);
 void read_rest_of_line(void);
 void dispOptions(void);
 int getInt(int min, int max);
-
-
+int getString(int max, char * string);
+void integer_to_binary(int integer,char* binary);
