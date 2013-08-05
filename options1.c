@@ -60,9 +60,26 @@ void perfect_squares(int * option_stats, unsigned number){
 * every character in the input array (called 'ascii' here) and print out
 * the result. Finally, you need to update the option_stats array 
 * appropriately 
+*
+* function loops through each character, and passing their ascii value to 
+* the function integer_to_binary(), which finds the binary representation
+* of a integer and returns it in the char array of the second argument
 **************************************************************************/
 void ascii_to_binary(int * option_stats, char * ascii){
-
+	int i, ascii_value, len = strlen(ascii);
+	/* +1 for the \0 characters */
+	char binary[8 + 1];
+	
+	printf("Binary representation: ");
+	
+	for(i = 0; i < len; i++){
+		ascii_value = *ascii;
+		integer_to_binary(ascii_value, binary);
+		printf("%s ",binary);
+		ascii++;
+	}
+	option_stats[ASCII_TO_BINARY]++;
+	printf("\n");
 }
 
 /**************************************************************************
@@ -73,9 +90,96 @@ void ascii_to_binary(int * option_stats, char * ascii){
 * {} [] () and you also need to allow for the nesting of brackets. 
 * You need to tell the user whether the brackets match or not. Finally you
 * need to update the option_stats array appropriately.
+*
+* function loops through all the characters of the test_string storing the
+* open bracket types in open_brackets, then if the next closing bracket
+* is the corresponding brackets for that set, then the array focuses on
+* the next tier outside the just closed brackets. If the closing bracket 
+* is not the corresponding bracket of the most recently opened brackets
+* then the functions tells the user the brackets do not match. If the 
+* function gets to the end of the string and there are no open brackets
+* left in the array, then the user is informed that the brackets do match.
 **************************************************************************/
 void matching_brackets(int * option_stats, char * test_string){
+	int j = 0, i, len = strlen(test_string);
+	char open_brackets[BRACKETS_MAX], matching_bracket;
+	
+	/* we can update the session summary here because the are
+	   no other chances for input from the user */
+	option_stats[MATCHING_BRACKETS]++;
 
+	/* open_brackets acts imilar to a stack, keeps track of the last open
+	   bracket. If the next closing bracket is of the same type, the 
+	   bracket is 'popped' off the stack. */
+	   
+	/* there's no way a string of 1 character can give a matching set of
+	   brackets, therefore they are either unequal or there are no 
+	   brackets */
+	if(len == 1){
+	  	printf("\nBrackets do not match or there are no brackets\n");
+		return;
+	}
+	
+	/* loop through each character in test_string, executing
+	   the releveant case */
+	for(i = 0; i < len; i++){
+		switch(*test_string){
+			/* the first 3 cases are functionally the same, 
+			   just for different brackets */
+			case '(':
+			case '[':
+			case '{':
+			/* the if statement is so we make use of the 0th 
+			   element of the array */
+				if(i) j++;
+				
+				/* open bracket is 'pushed' on */
+				open_brackets[j] = *test_string;
+				test_string++;
+				break;
+				
+				/* the next three cases are functionally the same, but
+				   matching_bracket needs to take a different value
+				   in each case */
+			case ')':
+				matching_bracket = '(';
+			case ']':
+				if(*test_string == ']') matching_bracket = '[';
+			case '}':
+				if(*test_string == '}') matching_bracket = '{';
+				
+				/* if the current bracket being analysed isn't the closing 
+				   bracket of open_brackets[j] i.e. the top of our 'stack'
+				   then the brackets do not match */
+				   
+				if(open_brackets[j] != matching_bracket){
+					printf("\nBrackets do not match\n");
+					return;
+				}
+				/* completed set of brackets is 'popped' off. Again, the if statement
+				   is to make use of the 0th element of the array */
+				if(j) j--;
+				test_string++;
+				break;
+				
+			/* this case will only occur if the character isn't one of
+			   the three types of brackets being used. In this case we
+			   wish to just go to the next character */
+			default:
+				test_string++;
+				break;
+		}
+	}
+	
+	/* the brackets match if the 'stack' is empty, i.e. j == 0 */
+	if(!j){
+		printf("\nThe brackets match\n");
+		return;
+	}
+	
+	/* if there's any circumstance that isn't captured by the above
+	   checks where the brackets don't match, they are covered by this */
+	printf("\nBrackets do not match\n");
 }
 
 /**************************************************************************
