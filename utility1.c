@@ -106,11 +106,12 @@ int getInt(int min, int max){
 * -> Input Validation Examples -> getInteger-basic.c
 **************************************************************************/
 
-int getString(int max, char * string){	
+int getString(int max, char * string){
+        char * cancel;	
 	while(TRUE){
-		fgets(string, max + EXTRA_SPACES, stdin);
+		cancel = fgets(string, max + EXTRA_SPACES, stdin);
 		/* if the user presses Ctrl+d or <enter> return to the menu */
-		if(*string == EOF || *string == '\n'){
+		if(cancel == NULL|| *string == '\n'){
 			return RETURN_TO_MENU;
 		/* otherwise, check to see if the last character is a \n 
 		   if it isn't, the string is longer than the array and
