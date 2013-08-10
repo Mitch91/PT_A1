@@ -45,11 +45,28 @@
 #define BRACKETS_MIN 1
 #define BRACKETS_MAX 20
 
+/* Specifies the minimum and maximum values for chars per line and the 
+   total number of chars for the formatted text function. Robbie stated
+   on blackboard that we can assume the chars per line will between 20 
+   and 50. */
+   
+#define FORMAT_TEXT_INT_MIN 20
+#define FORMAT_TEXT_INT_MAX 50 
+
+#define FORMAT_TEXT_STR_MIN 150
+#define FORMAT_TEXT_STR_MAX 200 
+
 /* Specifies the value that symbolises that the user wishes to return to 
    the main menu. It has to be a value that no ASCII character has */ 
+   
 #define RETURN_TO_MENU -2 
 
+/* Checks to see if we are meant to return to menu. */
+
+#define DO_WE_RETURN_TO_MENU if(cancel == RETURN_TO_MENU) break;
+
 /* Specifies the value of the most significant bit (MSB) */
+
 #define MSB 128   
 
 
@@ -63,7 +80,7 @@ typedef enum true_false
    readable code */
 typedef enum options{
 	PERFECT_SQUARES = 1, ASCII_TO_BINARY, MATCHING_BRACKETS, 
-	FORMATTED_TEXT, SESSION_SUMMARY, EXIT
+	FORMAT_TEXT, SESSION_SUMMARY, EXIT
 } OPTION;
 
 /* function prototypes for each option to be implemented */
@@ -79,3 +96,6 @@ void dispOptions(void);
 int getInt(int min, int max);
 int getString(int max, char * string);
 void integer_to_binary(int integer,char* binary);
+void clear_array(int * array, unsigned size);
+void analyse_string(char * text, int * info);
+void tokenise_string(char * text, char ** words, char * delims);

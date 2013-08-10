@@ -190,9 +190,21 @@ void matching_brackets(int * option_stats, char * test_string){
 * then need to insert extra spaces so that lines are spaced as evenly as 
 * possible. Finally you want to update the option_stats array appropriately.
 * 
+* 
 **************************************************************************/
 void format_text(int * option_stats, unsigned width, char * text){
-
+	int info[2], i;
+	char copy[FORMAT_TEXT_STR_MAX + EXTRA_SPACES];
+	char ** words;
+	strcpy(copy, text);
+	analyse_string(copy, info);
+	words = (char**) calloc(info[1], info[0]); 
+	
+	tokenise_string(text, words, " ");
+	for(i = 0; i < info[1]; i++){
+		printf("%d %s\n", info[1], words[i]);
+	}
+	free (words);
 }
 
 /**************************************************************************
@@ -200,7 +212,22 @@ void format_text(int * option_stats, unsigned width, char * text){
 * 7) from the main menu. In this option you need to display the number of 
 * times that each option has been run and then update the count of how 
 * many times this function has been run.
+*
+* Loops through all the values of enum options and prints out how many 
+* each of them has been used in a formatted fashion.
 **************************************************************************/
 void session_summary(int * option_stats){
-
+	int i;
+	
+	printf("Option Count\n------ -----\n");
+	/* iterate through the enum. we don't want to print out exit
+	   so we check if its less than not less than or equal to. 
+	   'Option' is six letters long so we indent the option number
+	   by 6 characters. We do the same thing for 'Count' where the
+	   indentation is 5 characters long */
+	for(i = PERFECT_SQUARES; i < EXIT; i++){
+		printf("%*d %*d\n", 6, i, 5, option_stats[i]);
+	}
+	
+	option_stats[SESSION_SUMMARY]++;
 }

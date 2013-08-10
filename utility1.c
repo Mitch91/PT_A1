@@ -26,7 +26,7 @@ void read_rest_of_line(void)
 }
 
 /**************************************************************************
-* integer_to_biunary() - converts an integer to its binary representation
+* integer_to_binary() - converts an integer to its binary representation
 * then stores the value in a C style string. The algorithm tests if integer
 * is larger than the current_bit, if it is, the value of current_bit is 
 * subtracted from integer and a 1 is placed at the position of the bit 
@@ -57,6 +57,18 @@ void integer_to_binary(int integer, char* binary){
 void dispOptions(void){
 	printf("\nMain Menu\n---------\n1) Perfect Squares\n2) ASCII to Binary Generator\n");
 	printf("3) Matching Brackets\n4) Formatting Text\n5) Session Summary\n6) Exit\n\n");
+}
+
+/**************************************************************************
+* clear_array() - changes all the elements of the array to zero, where size
+* is the size of the array
+**************************************************************************/
+
+void clear_array(int * array, unsigned size){
+	int i;
+	for(i = 0; i < size; i++){
+		array[i] = 0;
+	}
 }
 
 /**************************************************************************
@@ -110,7 +122,8 @@ int getString(int max, char * string){
         char * cancel;	
 	while(TRUE){
 		cancel = fgets(string, max + EXTRA_SPACES, stdin);
-		/* if the user presses Ctrl+d or <enter> return to the menu */
+		/* if the user presses Ctrl+d or <enter> return the constant
+           RETURN_TO_MENU to the caller function until we get to main() */
 		if(cancel == NULL|| *string == '\n'){
 			return RETURN_TO_MENU;
 		/* otherwise, check to see if the last character is a \n 
@@ -127,3 +140,51 @@ int getString(int max, char * string){
 		}
 	}
 }
+/**************************************************************************
+* analyse_string() - this function is used to find the number of words in
+* string as well as the number of characters in the largest word. These 
+* results are passed back the the caller through an int pointer, which 
+* point to an array containing the information needed.
+**************************************************************************/
+
+void analyse_string(char * text, int * info){
+	char * ptr = strtok(text, " ");
+	
+	info[0] = 0; /* info[0] contains the length of the longest word */
+	info[1] = 0; /* info[1] contains the number of words in the string */
+	while(ptr != NULL){
+		info[1]++; 
+		if(strlen(ptr) > info[0]) info[0] = strlen(ptr);
+		ptr = strtok(NULL, " ");
+	}
+	
+}
+
+/**************************************************************************
+* tokenise_string() - takes in three parameters, a char array, an array
+* char arrays and the delimeter. It then toknises text around the delimeter
+* and stores each token in the array words. 
+**************************************************************************/
+
+void tokenise_string(char * text, char ** words, char * delims){
+	int i = 0;
+	words[i] = strtok(text, delims);
+	i++;
+	
+	
+	while(words[i - 1] != NULL){
+		words[i] = strtok(NULL, delims);
+		i++;
+	}
+}
+
+
+
+
+
+
+
+
+
+
+

@@ -12,10 +12,13 @@
 
 int main(void)
 {
-	char ascii[ASCII_MAX + EXTRA_SPACES], test_string[BRACKETS_MAX + EXTRA_SPACES];
-    int option_stats[NUM_OPTION_STATS], cancel;
-	unsigned number;
+	char ascii[ASCII_MAX + EXTRA_SPACES], brackets[BRACKETS_MAX + EXTRA_SPACES];
+	char format[FORMAT_TEXT_STR_MAX + EXTRA_SPACES];
+    int option_stats[NUM_OPTION_STATS], cancel, char_per_line;
 	OPTION option_number;
+	
+	clear_array(option_stats, NUM_OPTION_STATS);
+	
 	while(TRUE){
 		dispOptions();
 		printf("Select your option: ");
@@ -31,10 +34,12 @@ int main(void)
 					PERFECT_SQUARES_MIN, PERFECT_SQUARES_MAX);
 					
 				/* get a number within in the range from the user */
-				number = getInt(PERFECT_SQUARES_MIN, PERFECT_SQUARES_MAX);
-				if(number == RETURN_TO_MENU) break;
+				cancel = getInt(PERFECT_SQUARES_MIN, PERFECT_SQUARES_MAX);
+				
+				DO_WE_RETURN_TO_MENU	
+
 				/* conduct our analysis */
-				perfect_squares(option_stats, number);
+				perfect_squares(option_stats, cancel);
 				break;
 			
 			case ASCII_TO_BINARY:
@@ -44,7 +49,7 @@ int main(void)
 				/* get user's input */
 				cancel = getString(ASCII_MAX, ascii);
 				
-				if(cancel == RETURN_TO_MENU) break;
+				DO_WE_RETURN_TO_MENU
 				
 				/* convert input to binary */
 				ascii_to_binary(option_stats, ascii);
@@ -56,30 +61,48 @@ int main(void)
 					BRACKETS_MIN, BRACKETS_MAX);
 				
 				/* get user's input */
-				cancel = getString(BRACKETS_MAX, test_string);
+				cancel = getString(BRACKETS_MAX, brackets);
 				
-				if(cancel == RETURN_TO_MENU) break;
+				DO_WE_RETURN_TO_MENU
 				
 				/* conduct our analysis */
-				matching_brackets(option_stats, test_string);
+				matching_brackets(option_stats, brackets);
 				break;
 			
-			case FORMATTED_TEXT:
-				printf("formatted text\n");
+			case FORMAT_TEXT:
+				printf("\nFormatting Text\n---------------\n\n");
+				printf("Enter an integer (maximal number of chars per line): ");
+				
+				cancel = getInt(FORMAT_TEXT_INT_MIN,
+					FORMAT_TEXT_INT_MAX);
+					
+				char_per_line = cancel;
+				
+				DO_WE_RETURN_TO_MENU
+				
+				do{
+				    printf("Enter some sentences (between %d - %d chars): ",
+						FORMAT_TEXT_STR_MIN, FORMAT_TEXT_STR_MAX);
+						
+					cancel = getString(FORMAT_TEXT_STR_MAX, format);
+					DO_WE_RETURN_TO_MENU
+					
+				} while(strlen(format) < FORMAT_TEXT_STR_MIN); 
+				
+				DO_WE_RETURN_TO_MENU
+				
+				format_text(option_stats, char_per_line, format);
 				break;
 				
 			case SESSION_SUMMARY:
-				printf("summary\n");
+				session_summary(option_stats);
 				break;
 				
 			case EXIT:
 				return EXIT_SUCCESS;
 				
-			case RETURN_TO_MENU:
-				break;
-				
-			default:
-				printf("invalid\n");
+			/*case RETURN_TO_MENU:
+				break;*/
 		}
 	}
 }
