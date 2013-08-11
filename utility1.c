@@ -1,11 +1,11 @@
 /***************************************************************************
 * COSC1283/1284 - Programming Techniques
 * Semester 2 2013 Assignment #1 
-* Full Name        : EDIT HERE
-* Student Number   : EDIT HERE
-* Yallara Username : EDIT HERE
-* Course Code      : EDIT HERE
-* Program Code     : EDIT HERE
+* Full Name        : Mitchell McGregor Elsbury
+* Student Number   : s3286283
+* Yallara Username : s3286283
+* Course Code      : COSC1284
+* Program Code     : BP094SEC8
 * Start up code provided by Paul Miller and Padgham
 ***************************************************************************/
 #include "assign1.h"
@@ -178,6 +178,76 @@ void tokenise_string(char * text, char ** words, char * delims){
 	}
 }
 
+/**************************************************************************
+* format_line() - takes in two parameters, the line to be formatted and the
+* width which that line should be. The function then adds spaces to make
+* the line the width it needs to be.
+**************************************************************************/
+
+void format_line(char * line, int width, int words_in_line){
+	int i, j, left_over_space, even_spacing, uneven_spacing;
+	char * word, * formatted_line, *head;
+	
+	/*printf("Line: %s", line); 
+	printf("words in line: %d\n",words_in_line);
+	printf("width: %d\n",width);*/
+	
+	formatted_line = malloc(width + EXTRA_SPACES);
+	head = formatted_line;
+	
+	left_over_space = width - strlen(line);
+	
+	/* if there's only 1 word on the line, we need a special case. 
+	   The main reason why is because we would be trying to divide
+	   by zero when we use the % operand which gives a floating 
+	   exception */
+	if(words_in_line == 1){
+		strcpy(formatted_line, line);
+		formatted_line += strlen(line);
+		
+		for(i = 0; i < left_over_space; i++){
+			*formatted_line = SPACE;
+			formatted_line++;
+		}
+	} else {
+		/* even_spacing is how many spaces there are between each word */
+		even_spacing = left_over_space / (words_in_line - 1);
+		
+		/* uneven_spacing is the amount of spaces left over when each word
+		   is spaced evenly */
+		uneven_spacing = left_over_space % (words_in_line - 1);
+		
+		
+		word = strtok(line, " ");
+		for(j = 0; j < words_in_line; j++){
+			
+			strcpy(formatted_line, word);
+			
+			if(j == words_in_line - 1) break;
+			
+			formatted_line += strlen(word);
+			*formatted_line = SPACE;
+			formatted_line++;
+				
+			for(i = 0; i < even_spacing; i++){
+				*formatted_line = SPACE;
+				formatted_line++;
+			}
+			
+			if(uneven_spacing){
+				*formatted_line = SPACE;
+				formatted_line++;
+				uneven_spacing--;
+			} 
+			
+			word = strtok(NULL, " ");
+			
+		}
+	}
+	printf("%s\n", head);
+	formatted_line = head;
+	free(formatted_line);
+}
 
 
 

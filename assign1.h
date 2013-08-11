@@ -1,11 +1,11 @@
 /***************************************************************************
 * COSC1283/1284 - Programming Techniques
 * Semester 1 2013 Assignment #1 
-* Full Name        : EDIT HERE
-* Student Number   : EDIT HERE
-* Yallara Username : EDIT HERE
-* Course Code      : EDIT HERE
-* Program Code     : EDIT HERE
+* Full Name        : Mitchell McGregor Elsbury
+* Student Number   : s3286283
+* Yallara Username : s3286283
+* Course Code      : COSC1284
+* Program Code     : BP094SEC8
 * Start up code provided by Paul Miller and Xiaodong Li
 ***************************************************************************/
 #include <stdio.h>
@@ -67,8 +67,11 @@
 
 /* Specifies the value of the most significant bit (MSB) */
 
-#define MSB 128   
+#define MSB 128  
 
+/* Specifies the ASCII value for a space */
+
+#define SPACE 32 
 
 /* provides us with a BOOLEAN type for using TRUE and FALSE */
 typedef enum true_false
@@ -99,3 +102,4 @@ void integer_to_binary(int integer,char* binary);
 void clear_array(int * array, unsigned size);
 void analyse_string(char * text, int * info);
 void tokenise_string(char * text, char ** words, char * delims);
+void format_line(char * line, int width, int words_in_line);

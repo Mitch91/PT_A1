@@ -1,11 +1,11 @@
 /***************************************************************************
 * COSC1283/1284 - Programming Techniques
 * Semester 2 2013 Assignment #1 
-* Full Name        : EDIT HERE
-* Student Number   : EDIT HERE
-* Yallara Username : EDIT HERE
-* Course Code      : EDIT HERE
-* Program Code     : EDIT HERE
+* Full Name        : Mitchell McGregor Elsbury
+* Student Number   : s3286283
+* Yallara Username : s3286283
+* Course Code      : COSC1284
+* Program Code     : BP094SEC8
 * Start up code provided by Paul Miller and Lin Padgham
 ***************************************************************************/
 #include "assign1.h"
@@ -193,18 +193,120 @@ void matching_brackets(int * option_stats, char * test_string){
 * 
 **************************************************************************/
 void format_text(int * option_stats, unsigned width, char * text){
-	int info[2], i;
+	int info[2], i, number_of_words, longest_word, line_length = 0;
+	int words_in_line = 0;
 	char copy[FORMAT_TEXT_STR_MAX + EXTRA_SPACES];
-	char ** words;
+	char ** words, * line, *head;
+	
 	strcpy(copy, text);
 	analyse_string(copy, info);
-	words = (char**) calloc(info[1], info[0]); 
+	
+	/* convert info[] to more descriptiv variables to help with
+	   readability */
+	number_of_words = info[1];
+	longest_word = info[0];
+	
+	/* allocate memory for the number of words in the sentences,
+	   each the size of the longest word */
+	words = (char**) calloc(number_of_words, longest_word); 
+	
+	/* we need an extra 2 characters for the \n and \0 */
+	line = (char*) malloc(width + EXTRA_SPACES);
+	head = line;
 	
 	tokenise_string(text, words, " ");
-	for(i = 0; i < info[1]; i++){
-		printf("%d %s\n", info[1], words[i]);
+	for(i = 0; i < number_of_words; i++){
+		
+		/* this statement occurs when adding the additional 
+		   word will create string longer than the width we allow */
+		if(line_length + strlen(words[i]) > width){
+		
+			/* the next word will be on the next line,
+			   so finish up this line */
+			*line = '\0';
+			
+			/* 'reset' the line */
+			line = head;
+			format_line(line, width, words_in_line);
+			
+			/* start the new line and reset the number of words
+			   in the line. we make it equal one here because we
+			   have already added a new word to the line */
+			strcpy(line,words[i]);
+			words_in_line = 1;
+			
+			/* move pointer to the end of the word and add a space */
+			line += strlen(words[i]);
+			*line = SPACE;
+			
+			/* line_length must also be reset, so this statment 
+			   effectively puts line_length eqaul to zero
+			   then adds the length of the word, plus the space */
+			line_length = strlen(words[i]) + 1;
+		} 
+		
+		/* this statement occurs when adding the additional word 
+		   will bring us to the exact width we allow */
+		else if(line_length + strlen(words[i]) == width){
+			/* add the last word to the line and finish it off, resetting
+			   all the necessary values */
+			   
+			/* add last word and add 1 to number of words*/
+			line++;
+			strcpy(line,words[i]);
+			line += strlen(words[i]);
+			words_in_line++;
+			
+			/* finish line off */
+			*line = '\0';
+			
+			/* reset the line and length */
+			line = head;
+			line_length = 0;
+			
+			/* format the line */
+			format_line(head, width, words_in_line);
+			
+			/* reset the number of words in the line. we make it equal 
+			   zero here because we haven't added a new word */
+			words_in_line = 0;
+						
+		} 
+		
+		/* this statement occurs when we are not near the end of the line */
+		else {
+			/* if we aren't at the start of the line, move one space forward 
+			   We have to do that so that if we were at the end of the line, we
+			   can just replace the space with a \0 rather than having to go back */
+			if(line_length) line++;
+			
+			/* add the word */
+			strcpy(line,words[i]);
+			words_in_line++;
+			/* jump to the end of the word and add a space */
+			line += strlen(words[i]);
+			*line = SPACE;
+			
+			/* +1 because of the space we added just above */
+			line_length += strlen(words[i]) + 1;
+		}
+		
+		/* on our last line, chances are we won't get a full line,
+		   but we still need to finish it off with a \0. so 
+		   thats what we do here */
+		if(i == number_of_words - 1){
+			*line = '\0';
+			
+			/* then format the line */
+			format_line(head, width, words_in_line);
+		}
 	}
+	
+	/* don't want those memory leaks! */
 	free (words);
+	
+	line = head;
+	free (line);
 }
 
 /**************************************************************************
