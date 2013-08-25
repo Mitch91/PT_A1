@@ -85,20 +85,29 @@ int getInt(int min, int max){
 	int integer = 0, cancel;
 	char* endPtr;
 	BOOLEAN finished = FALSE;
+	
 	while(!finished){
+	
+		/* get a string from getString, the check if the user wants
+		   to return to the main menu */
 		cancel = getString(MAX_NUM_DIGITS + EXTRA_SPACES, tempStr);
-		if(cancel == RETURN_TO_MENU) return RETURN_TO_MENU;
+		DO_WE_RETURN_TO_MENU
+		
 		/* try to convert the string to an integer of base 10*/
 		integer = (int) strtol(tempStr, &endPtr, 10);
 		
 		/* check to see if the next character after the integer is the \0 */
 		if(strcmp(endPtr, "") != 0){
+		/* if this block is executed, it means there was a least
+		   one character that was not an integer within our string */
 			printf("Input was not numeric.\nTry Again: ");
 		} 
 		/* check to make sure the value is inside the values of max and min */
 		else if(integer < min || integer > max){
 			printf("Input outside of range %d - %d.\nTry Again: ", min, max);
-		} else{
+		} 
+		/* if none of the other statements were true, we're done here */
+		else{
 			finished = TRUE;
 		}		
 	}
@@ -109,28 +118,31 @@ int getInt(int min, int max){
 * getString() - prompts the user for a string of text up to max characters
 * in length. Then checks to see if the user wishes to return to the menu,
 * if they do, the function returns the RETURN_TO_MENU constant to its 
-* caller. If not, the last character is check if it is the newline
-* character, if it isn't, the string is too long. Then the newline 
-* character is replaced with the null character to show that this is a C 
-* style string. The function then returns 1 to its caller to show that the 
-* function was successful. This function is based on the function 
+* caller. If not, the last character is checked to see if it is the newline
+* character, if it isn't, the string is too long. If it isn't too long, the 
+* newline character is replaced with the null character to show that this 
+* is a C style string. The function then returns 1 to its caller to show 
+* that the function was successful. This function is based on the function 
 * getInteger() from Blackboard in: Course Docs -> Function Examples 
 * -> Input Validation Examples -> getInteger-basic.c
 **************************************************************************/
 
 int getString(int max, char * string){
         char * cancel;	
+	
 	while(TRUE){
 		cancel = fgets(string, max + EXTRA_SPACES, stdin);
+		
 		/* if the user presses Ctrl+d or <enter> return the constant
            RETURN_TO_MENU to the caller function until we get to main() */
 		if(cancel == NULL|| *string == '\n'){
 			return RETURN_TO_MENU;
-		/* otherwise, check to see if the last character is a \n 
+		} 
+		/* otherwise, check to see if the last character is a \n, 
 		   if it isn't, the string is longer than the array and
 		   therefore outside of the range of characters we're 
-		   allowing */
-		} else if(string[strlen(string) - 1] != '\n'){
+		   allowing. So clear the buffer using read_rest_of_line */
+		else if(string[strlen(string) - 1] != '\n'){
 			printf("Input was too long.\nTry Again: ");
 			read_rest_of_line();
 		} else {
@@ -144,7 +156,7 @@ int getString(int max, char * string){
 * analyse_string() - this function is used to find the number of words in
 * string as well as the number of characters in the largest word. These 
 * results are passed back the the caller through an int pointer, which 
-* point to an array containing the information needed.
+* points to an array containing the information needed.
 **************************************************************************/
 
 void analyse_string(char * text, int * info){
@@ -153,7 +165,12 @@ void analyse_string(char * text, int * info){
 	info[0] = 0; /* info[0] contains the length of the longest word */
 	info[1] = 0; /* info[1] contains the number of words in the string */
 	while(ptr != NULL){
+	
+	/* add one to the number of words */
 		info[1]++; 
+		
+	/* if the current word is longer than the longest word so far
+	   the current word becomes the longest word */
 		if(strlen(ptr) > info[0]) info[0] = strlen(ptr);
 		ptr = strtok(NULL, " ");
 	}
@@ -161,8 +178,8 @@ void analyse_string(char * text, int * info){
 }
 
 /**************************************************************************
-* tokenise_string() - takes in three parameters, a char array, an array
-* char arrays and the delimeter. It then toknises text around the delimeter
+* tokenise_string() - takes in three parameters, a char array, an array of
+* char arrays and the delimiter. It then tokenises text around the delimiter
 * and stores each token in the array words. 
 **************************************************************************/
 
@@ -171,7 +188,7 @@ void tokenise_string(char * text, char ** words, char * delims){
 	words[i] = strtok(text, delims);
 	i++;
 	
-	
+	/* while there is still more tokens, keep tokenising */
 	while(words[i - 1] != NULL){
 		words[i] = strtok(NULL, delims);
 		i++;
@@ -188,23 +205,28 @@ void format_line(char * line, int width, int words_in_line){
 	int i, j, left_over_space, even_spacing, uneven_spacing;
 	char * word, * formatted_line, *head;
 	
-	/*printf("Line: %s", line); 
-	printf("words in line: %d\n",words_in_line);
-	printf("width: %d\n",width);*/
-	
+	/* Allocate enough space for the line we are creating */
 	formatted_line = malloc(width + EXTRA_SPACES);
+	
+	/* We want to keep track f where the head of formatted_line
+	   is, so we make a copy */
 	head = formatted_line;
 	
+	/* Then calculate the number of spaces we have to work with */
 	left_over_space = width - strlen(line);
 	
-	/* if there's only 1 word on the line, we need a special case. 
+	/* If there's only 1 word on the line, we need a special case. 
 	   The main reason why is because we would be trying to divide
 	   by zero when we use the % operand which gives a floating 
 	   exception */
 	if(words_in_line == 1){
+	
+	/* copy line to formatted_line and move the pointer to the
+	   end of the word */
 		strcpy(formatted_line, line);
 		formatted_line += strlen(line);
 		
+		/* then just add space for the rest of the line */
 		for(i = 0; i < left_over_space; i++){
 			*formatted_line = SPACE;
 			formatted_line++;
@@ -217,33 +239,47 @@ void format_line(char * line, int width, int words_in_line){
 		   is spaced evenly */
 		uneven_spacing = left_over_space % (words_in_line - 1);
 		
-		
+		/* We have to use words_in_line - 1 for the spacing because 
+		   the spaces go in between the words. Or you could think of 
+		   it as each word has its own amount of spaces except the 
+		   last word */
+		   
+		/* tokenise line into words */   
 		word = strtok(line, " ");
 		for(j = 0; j < words_in_line; j++){
 			
+			/* Copy the word to the formatted line we are building */
 			strcpy(formatted_line, word);
 			
+			/* If it is the last word, we don't want to add spaces
+			   and such, so break */
 			if(j == words_in_line - 1) break;
 			
+			/* Jump to the end of the word, and add a space */
 			formatted_line += strlen(word);
 			*formatted_line = SPACE;
 			formatted_line++;
 				
+			/* Then add the spacing we allocated for each gap */	
 			for(i = 0; i < even_spacing; i++){
 				*formatted_line = SPACE;
 				formatted_line++;
 			}
 			
+			/* If uneven_spacing != 0, add one space to the current gap */
 			if(uneven_spacing){
 				*formatted_line = SPACE;
 				formatted_line++;
 				uneven_spacing--;
 			} 
 			
+			/* get the next token */
 			word = strtok(NULL, " ");
 			
 		}
 	}
+	
+	/* print out our formatted string, then free up our allocated memory */
 	printf("%s\n", head);
 	formatted_line = head;
 	free(formatted_line);

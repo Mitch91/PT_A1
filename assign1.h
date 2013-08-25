@@ -14,6 +14,7 @@
 #include <math.h>
 
 /* constants go here */
+/* defines the number of options available to the user */
 #define NUM_OPTION_STATS 5
 
 /* This is used to compensate for the extra character spaces taken up by
@@ -25,11 +26,15 @@
 #define MAX_OPTION_INPUT 1
 
 /* Specifies the maximum number of characters an input of an integer 
-   can be. i.e. 7 = 7 digits */
+   can be. i.e. 7 = 7 digits, not 7 the number (used when calling 
+   getString() to make sure we get a number with the right number
+   of digits) */
+   
 #define MAX_NUM_DIGITS 7   
 
 /* Specifies the minimum and maximum values allowed for the perfect
    squares option */
+   
 #define PERFECT_SQUARES_MIN 1
 #define PERFECT_SQUARES_MAX 1000000 
 
@@ -39,7 +44,7 @@
 #define ASCII_MIN 1
 #define ASCII_MAX 5   
 
-/* Specifies the minimum and maxiumum amount of characters allowed to be 
+/* Specifies the minimum and maximum amount of characters allowed to be 
    input into the matching_brackets function */
    
 #define BRACKETS_MIN 1
@@ -65,13 +70,18 @@
 
 #define DO_WE_RETURN_TO_MENU if(cancel == RETURN_TO_MENU) break;
 
-/* Specifies the value of the most significant bit (MSB) */
+/* Specifies the value of the most significant bit (MSB) within a byte */
 
 #define MSB 128  
 
 /* Specifies the ASCII value for a space */
 
 #define SPACE 32 
+
+/* For some reason if I use malloc() with less than 4 I start
+   getting Segmentation faults for no apparent reason */
+   
+#define MIN_MALLOC_SIZE 4
 
 /* provides us with a BOOLEAN type for using TRUE and FALSE */
 typedef enum true_false
@@ -82,7 +92,7 @@ typedef enum true_false
 /* Provides us with variables corresponding to each option for more 
    readable code */
 typedef enum options{
-	PERFECT_SQUARES = 1, ASCII_TO_BINARY, MATCHING_BRACKETS, 
+	PERFECT_SQUARES = 0, ASCII_TO_BINARY, MATCHING_BRACKETS, 
 	FORMAT_TEXT, SESSION_SUMMARY, EXIT
 } OPTION;
 
