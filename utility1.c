@@ -185,12 +185,17 @@ void analyse_string(char * text, int * info){
 
 void tokenise_string(char * text, char ** words, char * delims){
 	int i = 0;
-	words[i] = strtok(text, delims);
+	char* word = strtok(text, delims);
+	if(word != NULL) words[i] = word;
 	i++;
 	
-	/* while there is still more tokens, keep tokenising */
-	while(words[i - 1] != NULL){
-		words[i] = strtok(NULL, delims);
+	/* Eventually we're going to get to the end of our allocated block.
+       Ideally, so we need a temp variable (in the case, 'word') that 
+       checks to see if we're still within our allocated memory. */
+	while(TRUE){
+		word = strtok(NULL, delims);
+		if(word != NULL) words[i] = word;
+		else break;
 		i++;
 	}
 }

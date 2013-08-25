@@ -78,10 +78,10 @@
 
 #define SPACE 32 
 
-/* For some reason if I use malloc() with less than 4 I start
+/* For some reason if I use malloc() with less than 8 I start
    getting Segmentation faults for no apparent reason */
    
-#define MIN_MALLOC_SIZE 4
+#define MIN_MALLOC_SIZE 8
 
 /* provides us with a BOOLEAN type for using TRUE and FALSE */
 typedef enum true_false

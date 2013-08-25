@@ -38,3 +38,5 @@ Assumptions:
 
 Any other notes for the marker:
 -------------------------------
+My program uses the math.h library, so the -lm flag is needed to compile.
+Paul said on blackboard that this was fine.
